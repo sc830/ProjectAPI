@@ -6,41 +6,53 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())  # This is to load your API keys from .env
 
 TMDB_TRENDING_PATH = 'trending/all/day'
-TMDB_SEARCH_API_REQUEST = f'https://api.themoviedb.org/3/{TMDB_TRENDING_PATH}?'
+TMDB_ACTOR_PATH = 'trending/person/day'
+TMDB_TRENDING_API_REQUEST = f'https://api.themoviedb.org/3/{TMDB_TRENDING_PATH}?'
+TMDB_ACTOR_API_REQUEST = f'https://api.themoviedb.org/3/{TMDB_ACTOR_PATH}?'
 
-#def get_top_10_weekly_trending_movies():
+
 response = requests.get(
-    TMDB_SEARCH_API_REQUEST,
+    TMDB_TRENDING_API_REQUEST,
     params={
         'api_key': os.getenv('TMDB_API_KEY')
     }
 )
 # Encodes response into a python json dictionary.
-json_data = response.json()
-#print(json_data)
+trending_json_data = response.json()
 
-# Convert json_data to a formatted pretty
-# json string that is easy for humans to read.
-# Mouse over function to get definition of indent and sort_keys
-pretty_json_data = json.dumps(json_data, indent=4, sort_keys=True)
-#print(pretty_json_data)
 
-daily_trending = json_data
+response = requests.get(
+    TMDB_ACTOR_API_REQUEST,
+    params={
+        'api_key': os.getenv('TMDB_API_KEY')
+    }
+)
+# Encodes response into a python json dictionary.
+actor_json_data = response.json()
+
+daily_trending = trending_json_data
+actors = actor_json_data
 # Add Parsing Code Here
 
-#movies = [item for item in daily_trending['results'] if item['media_type'] == 'movie']
-media = []
+#movies = [item for item in daily_trending['results'] if item['all_results_type'] == 'movie']
+all_results = []
 
 for item in daily_trending['results']:
     if item['media_type'] == 'movie':
-        new = {'title': item['title'], 'popularity': item['popularity'], 'vote_count': item['vote_count']}
-        media.append(new)
+        new = {'name': item['title'], 'popularity': item['popularity'], 'vote_count': item['vote_count']}
+        all_results.append(new)
     else:
-        new = {'title': item['name'], 'popularity': item['popularity'], 'vote_count': item['vote_count']}
-        media.append(new)
+        new = {'name': item['name'], 'popularity': item['popularity'], 'vote_count': item['vote_count']}
+        all_results.append(new)
 
-for item in media:
-    print(f"Title/Name: {item['title']:<50}Popularity: {item['popularity']:<30}Vote Count: {item['vote_count']:.1f}")
+for actor in actors['results']:
+    if actor['known_for'][0]['media_type'] == 'movie':
+        new = {'name': actor['known_for'][0]['title'], 'popularity': actor['known_for'][0]['popularity'], 'vote_count': actor['known_for'][0]['vote_count']}
+    else:
+        new = {'name': actor['known_for'][0]['name'], 'popularity': actor['known_for'][0]['popularity'], 'vote_count': actor['known_for'][0]['vote_count']}
+
+for item in all_results:
+    print(f"Title/Name: {item['name']:<50}Popularity: {item['popularity']:<30}Vote Count: {item['vote_count']:.1f}")
 
         
 
