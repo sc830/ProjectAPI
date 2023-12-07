@@ -1,4 +1,3 @@
-
 ### Project ###
 In this project, I was given a minimal set of files and tasked with integrating The Movie Database (TMDB) API into a Java application. The goal was to retrieve information about trending movies, actors, and TV shows, then categorize and display them based on specific criteria. This project provided an opportunity to delve into API integration, data manipulation, and GUI development.
 
