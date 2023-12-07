@@ -11,7 +11,7 @@ Current Information: Acquires data from TMDB on command, ensuring up-to-date inf
 Clone this repository to your device.
 Create an account and API key for TMDB at https://developer.themoviedb.org/docs.
 Create a .env file in the root directory that defines TMDB_API_KEY as your API key.
-Compile and run fetch_n_print.py.
+Compile and run fetch_n_print_movies.py.
 
 ### Skill Development ###
 Throughout this project, I honed skills related to RESTful API usage.
